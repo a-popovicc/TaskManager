@@ -1,21 +1,23 @@
 package io.github.apopovicc.taskmanager.dto.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserMeResponse {
+@AllArgsConstructor
+public class TaskDTO {
 
     private UUID id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private List<TaskDTO> tasks;
+
+    private String title;
+
+    private String description;
+
+    private boolean completed;
+
+    private LocalDateTime dueDate;
 }
