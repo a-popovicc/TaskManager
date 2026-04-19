@@ -9,32 +9,36 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+
 public class JsonStorage {
 
     private final ObjectMapper objectMapper;
-    private final String FILE_PATH = "data/users.json";
+    private final String filePath;
 
-    public JsonStorage(ObjectMapper objectMapper) {
+    public JsonStorage(ObjectMapper objectMapper, String filePath) {
         this.objectMapper = objectMapper;
+        this.filePath = filePath;
     }
 
-    // 📖 READ
+
     public List<User> loadUsers() {
         try {
-            ClassPathResource resource = new ClassPathResource(FILE_PATH);
+            Path path = Paths.get(filePath);
 
-            if (!resource.exists()) {
+            if (Files.notExists(path)) {
                 return new ArrayList<>();
             }
 
-            InputStream inputStream = resource.getInputStream();
+            byte[] bytes = Files.readAllBytes(path);
 
             List<User> users = objectMapper.readValue(
-                    inputStream,
+                    bytes,
                     new TypeReference<List<User>>() {}
             );
 
@@ -45,15 +49,26 @@ public class JsonStorage {
         }
     }
 
-    // 💾 WRITE
+
     public void saveUsers(List<User> users) {
         try {
-            ClassPathResource resource = new ClassPathResource(FILE_PATH);
+            Path path = Paths.get(filePath);
 
-            File file = resource.getFile();
+            // kreira folder ako ne postoji
+            if (Files.notExists(path.getParent())) {
+                Files.createDirectories(path.getParent());
+            }
 
-            objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(file, users);
+            // kreira fajl ako ne postoji
+            if (Files.notExists(path)) {
+                Files.createFile(path);
+            }
+
+            byte[] json = objectMapper
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValueAsBytes(users);
+
+            Files.write(path, json);
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to save users to JSON", e);

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository {
+public class  UserRepositoryImpl implements UserRepository {
 
     private final JsonStorage jsonStorage;
     private final List<User> users;

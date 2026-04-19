@@ -31,7 +31,12 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("User already exists");
         }
 
-        PasswordValidator.validate(request.getPassword());
+        try {
+            PasswordValidator.validate(request.getPassword());
+        }catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+
 
         User user = UserMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -44,11 +49,11 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User doesn't exist"));
-
+ 
         if (!passwordEncoder.matches(
                 request.getPassword(),
-                user.getPassword()
-        )) {
+                user.getPassword()))
+        {
             throw new RuntimeException("Password doesn't match");
         }
         return jwtService.generateToken(user.getEmail());
