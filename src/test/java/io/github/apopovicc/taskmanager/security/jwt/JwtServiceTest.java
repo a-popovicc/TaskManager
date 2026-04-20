@@ -19,5 +19,30 @@ class JwtServiceTest {
         assertNotNull(response.getToken());
         assertFalse(response.getToken().isBlank());
     }
+    @Test
+    void shouldGenerateDifferentTokensForDifferentEmails() {
+        AuthResponse token1 = jwtService.generateToken("user1@mail.com");
+        AuthResponse token2 = jwtService.generateToken("user2@mail.com");
+
+        assertNotEquals(token1.getToken(), token2.getToken());
+    }
+    @Test
+    void shouldExtractEmailFromToken() {
+        String email = "test@gmail.com";
+
+        AuthResponse token = jwtService.generateToken(email);
+        String extracted = jwtService.extractEmail(token.getToken());
+
+        assertNotNull(extracted);
+        assertEquals(email, extracted);
+    }
+    @Test
+    void shouldValidateToken() {
+        AuthResponse token = jwtService.generateToken("test@mail.com");
+
+        assertTrue(jwtService.isTokenValid(token.getToken()));
+    }
+
+
 
 }
