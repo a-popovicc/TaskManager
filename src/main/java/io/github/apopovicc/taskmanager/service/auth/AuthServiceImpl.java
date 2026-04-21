@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.saveUser(user);
 
-        return jwtService.generateToken(user.getEmail());
+        return jwtService.generateToken(user.getId());
     }
 
     @Override
@@ -56,6 +56,6 @@ public class AuthServiceImpl implements AuthService {
         {
             throw new RuntimeException("Password doesn't match");
         }
-        return jwtService.generateToken(user.getEmail());
+        return jwtService.generateToken(user.getId());
     }
 }

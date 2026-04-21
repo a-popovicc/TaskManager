@@ -14,12 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 abstract class AuthServiceTest {
 
@@ -59,28 +59,28 @@ abstract class AuthServiceTest {
         request.setEmail("test@test.com");
         request.setPassword("Password123!");
 
-        // 1. user ne postoji
+        User user = new User();
+        user.setId(UUID.randomUUID());
+        user.setEmail(request.getEmail());
+
         when(userRepository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.empty());
 
-        // 2. password encoder
         when(passwordEncoder.encode(anyString()))
                 .thenReturn("encodedPassword");
 
-        // 3. jwt token
+        doNothing().when(userRepository).saveUser(any(User.class));
+
         AuthResponse expected = new AuthResponse("token");
 
-        when(jwtService.generateToken(request.getEmail()))
+        when(jwtService.generateToken(any(UUID.class)))
                 .thenReturn(expected);
 
-        // ACT
         AuthResponse response = authService.signUp(request);
 
-        // ASSERT
         assertNotNull(response);
         assertEquals(expected, response);
 
-        // proveri da je user snimljen
         verify(userRepository).saveUser(any(User.class));
     }
     @Test
@@ -107,6 +107,7 @@ abstract class AuthServiceTest {
 
         assertThrows(RuntimeException.class, ()-> authService.login(request));
     }
+
     @Test
     void shouldThrowExceptionWhenPasswordDoesNotMatch() {
         LoginRequest request = new LoginRequest();
@@ -117,17 +118,14 @@ abstract class AuthServiceTest {
         user.setEmail(request.getEmail());
         user.setPassword("encodedPassword");
 
-        // 1. user postoji
         when(userRepository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.of(user));
 
-        // 2. password mismatch
         when(passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword()
         )).thenReturn(false);
 
-        // 3. test
         assertThrows(RuntimeException.class,
                 () -> authService.login(request));
     }
@@ -147,7 +145,7 @@ abstract class AuthServiceTest {
         .thenReturn(true);
 
         AuthResponse expected = new AuthResponse("token");
-        when(jwtService.generateToken(user.getEmail()))
+        when(jwtService.generateToken(user.getId()))
         .thenReturn(expected);
 
         AuthResponse response = authService.login(request);

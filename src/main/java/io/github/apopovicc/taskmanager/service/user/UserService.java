@@ -6,6 +6,9 @@ import io.github.apopovicc.taskmanager.model.User;
 import io.github.apopovicc.taskmanager.repository.UserRepository;
 import io.github.apopovicc.taskmanager.security.jwt.JwtService;
 
+import java.util.Optional;
+import java.util.UUID;
+
 
 public class UserService {
 
@@ -21,8 +24,8 @@ public class UserService {
         if(!jwtService.isTokenValid(token)) {
             throw new RuntimeException("Invalid token");
         }
-        String email = jwtService.extractEmail(token);
-        User user = userRepository.findByEmail(email)
+        UUID id = jwtService.extractUserId(token);
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return UserMapper.userToDTO(user);

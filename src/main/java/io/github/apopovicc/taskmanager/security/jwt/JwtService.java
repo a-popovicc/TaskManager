@@ -9,19 +9,21 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class JwtService {
+
     private final Key secretKey = Keys.hmacShaKeyFor(
             "my-super-secret-key-my-super-secret-key".getBytes(StandardCharsets.UTF_8)
     );
 
-    public AuthResponse generateToken(String email) {
+    public AuthResponse generateToken(UUID userId) {
 
         String token = Jwts.builder()
-                .setSubject(email)
+                .setSubject(userId.toString())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1h
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -31,10 +33,10 @@ public class JwtService {
         return response;
     }
 
-
-    // EXTRACT EMAIL
-    public String extractEmail(String token) {
-        return extractAllClaims(token).getSubject();
+    // EXTRACT USER ID
+    public UUID extractUserId(String token) {
+        String subject = extractAllClaims(token).getSubject();
+        return UUID.fromString(subject);
     }
 
 
@@ -42,14 +44,11 @@ public class JwtService {
     public boolean isTokenValid(String token) {
         try {
             Claims claims = extractAllClaims(token);
-
             return !isTokenExpired(claims);
         } catch (Exception e) {
             return false;
         }
     }
-
-
     // EXTRACT ALL CLAIMS
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
@@ -58,8 +57,6 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-
     // CHECK EXPIRATION
     private boolean isTokenExpired(Claims claims) {
         return claims.getExpiration().before(new Date());
