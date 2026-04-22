@@ -14,7 +14,7 @@ Its purpose is to demonstrate understanding of:
 * Service-layer architecture
 * Testable and maintainable backend structure
 
-This project represents my transition from basic Java development into **modern Spring-based backend development**.
+This project represents my transition from basic Java development into modern Spring-based backend development.
 
 ---
 
@@ -30,6 +30,19 @@ Key learning goals:
 * Implementing authentication logic
 * Building a stable API before introducing a real database
 * Writing testable business logic
+
+---
+
+## 🚧 Current Status
+
+✅ Authentication system completed
+✅ Token-based authorization
+✅ User service
+✅ Spring security filter chain
+✅ Task management features in progress
+🚧 Controller layer & API endpoints (integration with security filter)
+🚧 Exception handling
+🚧 Database migration planned
 
 ---
 
@@ -83,9 +96,7 @@ Instead of using a traditional SQL database, the project currently uses a **JSON
 
 ### Why JSON?
 
-This decision is intentional.
-
-The focus of this phase is:
+The foc us of this phase is:
 
 * learning **Spring Web**
 * designing **clean APIs**
@@ -127,27 +138,12 @@ The project includes unit tests for:
 Testing focuses on verifying **behavior**, not framework internals.
 
 ---
-
-## 🚧 Current Status
-
-✅ Authentication system completed
-✅ Token-based authorization
-✅ User service abstraction
-✅ Clean API structure
-🚧 Task management features in progress
-🚧 Database migration planned
-
-This repository represents an **active learning project** and is continuously evolving.
-
----
 ## 🚀 Future Improvements
 
 * Replace JSON storage with SQL database
-* Full task CRUD operations
-* Role-based authorization
+* Role-based authorization system (Admin / Client roles)
+* User permissions & access control
 * Exception handling standardization
-* API documentation (OpenAPI / Swagger)
-* Docker setup
 
 ---
 
