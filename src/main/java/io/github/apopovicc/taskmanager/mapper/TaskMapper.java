@@ -21,8 +21,8 @@ public class TaskMapper {
 
         return task;
     }
-
-    public static Task dtoTaskRequestToTask(AddTaskRequest addTaskRequest) {
+    //DTO-model, request mapping
+    public static Task addTaskRequestToTask(AddTaskRequest addTaskRequest) {
         if (addTaskRequest == null) return null;
 
         Task task = new Task();
@@ -35,7 +35,7 @@ public class TaskMapper {
 
         return task;
     }
-    //model-DTO\
+    //model-DTO, response mapping
     public static TaskDTO toDTO(Task task) {
 
         if (task == null) return null;
@@ -49,6 +49,15 @@ public class TaskMapper {
         taskDTO.setDueDate(task.getDueDate());
 
         return  taskDTO;
+    }
+    //edit request->dto-model
+    public static void editRequestToTask(AddTaskRequest addTaskRequest, Task existingTask) {
+        if(existingTask == null || addTaskRequest == null)
+            throw new RuntimeException("Add task request or add task request null");
+
+        existingTask.setTitle(addTaskRequest.getTitle());
+        existingTask.setDescription(addTaskRequest.getDescription());
+        existingTask.setDueDate(addTaskRequest.getDueDate());
     }
 
 }

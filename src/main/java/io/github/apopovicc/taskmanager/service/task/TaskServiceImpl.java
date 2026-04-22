@@ -6,7 +6,6 @@ import io.github.apopovicc.taskmanager.mapper.TaskMapper;
 import io.github.apopovicc.taskmanager.model.Task;
 import io.github.apopovicc.taskmanager.model.User;
 import io.github.apopovicc.taskmanager.repository.UserRepository;
-import io.github.apopovicc.taskmanager.security.jwt.JwtService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,11 +17,9 @@ import java.util.UUID;
 public class TaskServiceImpl implements TaskService {
 
     private final UserRepository userRepository;
-    private final JwtService jwtService;
 
-    public TaskServiceImpl(UserRepository userRepository, JwtService jwtService) {
+    public TaskServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
     }
 
     @Override
@@ -30,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Task newTask = TaskMapper.dtoTaskRequestToTask(request);
+        Task newTask = TaskMapper.addTaskRequestToTask(request);
 
         if (user.getTasks() == null) {
             user.setTasks(new ArrayList<>());
@@ -56,8 +53,8 @@ public class TaskServiceImpl implements TaskService {
                 tasks.remove(i);
                 break;
             }
-        }
-         */
+        } */
+
         user.getTasks().removeIf(task -> task.getId().equals(idTask));
         userRepository.saveUser(user);
         return user.getTasks()
@@ -77,9 +74,27 @@ public class TaskServiceImpl implements TaskService {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        existingTask.setTitle(request.getTitle());
-        existingTask.setDescription(request.getDescription());
-        existingTask.setDueDate(request.getDueDate());
+        TaskMapper.editRequestToTask(request,existingTask);
+
+        userRepository.saveUser(user);
+        return user.getTasks()
+                .stream()
+                .sorted(Comparator.comparing(Task::getDueDate))
+                .map(TaskMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public List<TaskDTO> markTaskCompleted(UUID idUser, UUID idTask) {
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Task existingTask= user.getTasks()
+                .stream()
+                .filter(task -> task.getId().equals(idTask))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        existingTask.setCompleted(!existingTask.isCompleted());
 
         userRepository.saveUser(user);
         return user.getTasks()

@@ -10,5 +10,5 @@ public interface TaskService {
     List<TaskDTO> addTask(UUID id,AddTaskRequest request);
     List<TaskDTO> removeTask(UUID idUser,  UUID idTask);
     List<TaskDTO> editTask(UUID idUser,  UUID idTask, AddTaskRequest request);
-
+    List<TaskDTO> markTaskCompleted(UUID idUser,  UUID idTask);
  }
