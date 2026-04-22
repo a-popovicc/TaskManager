@@ -34,15 +34,16 @@ Key learning goals:
 ---
 
 ## 🚧 Current Status
-
-✅ Authentication system completed
-✅ Token-based authorization
-✅ User service
-✅ Spring security filter chain
-✅ Task management features in progress
-🚧 Controller layer & API endpoints (integration with security filter)
-🚧 Exception handling
-🚧 Database migration planned
+<ul>
+<li>✅ Authentication system completed</li>
+<li>✅ Token-based authorization</li>
+<li>✅ User service</li>
+<li>✅ Spring security filter chain</li>
+<li>✅ Task management features in progress</li>
+<li>🚧 Controller layer & API endpoints (integration with security filter)</li>
+<li>🚧 Exception handling</li>
+<li>🚧 Database migration planned</li>
+</ul>
 
 ---
 
