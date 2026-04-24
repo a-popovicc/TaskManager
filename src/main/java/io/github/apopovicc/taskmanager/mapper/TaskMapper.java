@@ -1,6 +1,6 @@
 package io.github.apopovicc.taskmanager.mapper;
 
-import io.github.apopovicc.taskmanager.dto.request.AddTaskRequest;
+import io.github.apopovicc.taskmanager.dto.request.TaskRequest;
 import io.github.apopovicc.taskmanager.dto.response.TaskDTO;
 import io.github.apopovicc.taskmanager.model.Task;
 
@@ -22,16 +22,16 @@ public class TaskMapper {
         return task;
     }
     //DTO-model, request mapping
-    public static Task addTaskRequestToTask(AddTaskRequest addTaskRequest) {
-        if (addTaskRequest == null) return null;
+    public static Task TaskRequestToTask(TaskRequest taskRequest) {
+        if (taskRequest == null) return null;
 
         Task task = new Task();
 
         task.setId(UUID.randomUUID());
-        task.setTitle(addTaskRequest.getTitle());
-        task.setDescription(addTaskRequest.getDescription());
+        task.setTitle(taskRequest.getTitle());
+        task.setDescription(taskRequest.getDescription());
         task.setCompleted(false);
-        task.setDueDate(addTaskRequest.getDueDate());
+        task.setDueDate(taskRequest.getDueDate());
 
         return task;
     }
@@ -51,13 +51,13 @@ public class TaskMapper {
         return  taskDTO;
     }
     //edit request->dto-model
-    public static void editRequestToTask(AddTaskRequest addTaskRequest, Task existingTask) {
-        if(existingTask == null || addTaskRequest == null)
+    public static void editRequestToTask(TaskRequest taskRequest, Task existingTask) {
+        if(existingTask == null || taskRequest == null)
             throw new RuntimeException("Add task request or add task request null");
 
-        existingTask.setTitle(addTaskRequest.getTitle());
-        existingTask.setDescription(addTaskRequest.getDescription());
-        existingTask.setDueDate(addTaskRequest.getDueDate());
+        existingTask.setTitle(taskRequest.getTitle());
+        existingTask.setDescription(taskRequest.getDescription());
+        existingTask.setDueDate(taskRequest.getDueDate());
     }
 
 }

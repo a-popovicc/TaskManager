@@ -1,6 +1,6 @@
 package io.github.apopovicc.taskmanager.service.task;
 
-import io.github.apopovicc.taskmanager.dto.request.AddTaskRequest;
+import io.github.apopovicc.taskmanager.dto.request.TaskRequest;
 import io.github.apopovicc.taskmanager.dto.response.TaskDTO;
 import io.github.apopovicc.taskmanager.model.Task;
 import io.github.apopovicc.taskmanager.model.User;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ abstract class TaskServiceTest {
     void shouldAddTaskToUser() {
         User user =  createUser();
 
-        AddTaskRequest request = new AddTaskRequest();
+        TaskRequest request = new TaskRequest();
         request.setTitle("Task 1");
         request.setDescription("Desc");
         request.setDueDate(LocalDateTime.now());
@@ -100,7 +99,7 @@ abstract class TaskServiceTest {
 
         user.getTasks().add(task);
 
-        AddTaskRequest request = new AddTaskRequest();
+        TaskRequest request = new TaskRequest();
         request.setTitle("new");
 
         when(userRepository.findById(user.getId()))

@@ -1,6 +1,6 @@
 package io.github.apopovicc.taskmanager.service.task;
 
-import io.github.apopovicc.taskmanager.dto.request.AddTaskRequest;
+import io.github.apopovicc.taskmanager.dto.request.TaskRequest;
 import io.github.apopovicc.taskmanager.dto.response.TaskDTO;
 import io.github.apopovicc.taskmanager.mapper.TaskMapper;
 import io.github.apopovicc.taskmanager.model.Task;
@@ -23,11 +23,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> addTask(UUID userId, AddTaskRequest request) {
+    public List<TaskDTO> addTask(UUID userId, TaskRequest request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Task newTask = TaskMapper.addTaskRequestToTask(request);
+        Task newTask = TaskMapper.TaskRequestToTask(request);
 
         if (user.getTasks() == null) {
             user.setTasks(new ArrayList<>());
@@ -65,7 +65,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> editTask(UUID idUser, UUID idTask, AddTaskRequest request) {
+    public List<TaskDTO> editTask(UUID idUser, UUID idTask, TaskRequest request) {
         User user = userRepository.findById(idUser)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Task existingTask= user.getTasks()
