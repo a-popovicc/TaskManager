@@ -40,7 +40,7 @@ Key learning goals:
 <li>✅ User service</li>
 <li>✅ Spring security filter chain</li>
 <li>✅ Task management features in progress</li>
-<li>🚧 Controller layer & API endpoints (integration with security filter)</li>
+<li>✅ Controller layer & API endpoints (integration with security filter)</li>
 <li>🚧 Exception handling</li>
 <li>🚧 Database migration planned</li>
 </ul>
