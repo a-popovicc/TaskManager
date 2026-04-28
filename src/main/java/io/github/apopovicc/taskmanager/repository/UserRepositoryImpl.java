@@ -35,12 +35,21 @@ public class  UserRepositoryImpl implements UserRepository {
 
     @Override
     public void saveUser(User user) {
+
+        boolean updated = false;
+
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId().equals(user.getId())) {
                 users.set(i, user);
+                updated = true;
                 break;
             }
         }
+
+        if (!updated) {
+            users.add(user);
+        }
+
         jsonStorage.saveUsers(users);
     }
 }

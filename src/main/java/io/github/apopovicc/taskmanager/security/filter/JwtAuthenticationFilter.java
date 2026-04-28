@@ -9,14 +9,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final JwtService jwtService;
     private final CustomUserDetailsService userDetailsService;
 
@@ -25,44 +26,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
+
+    //preskače auth endpoint-e
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/api/auth/");
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 1. Uzmi Authorization header
+        System.out.println("FILTER HIT: " + request.getServletPath());
+
         String authHeader = request.getHeader("Authorization");
 
-        // 2. Ako nema tokena → pusti request dalje
+        // 1. Ako nema tokena → nastavi dalje
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 3. Izvuci JWT token
         String token = authHeader.substring(7);
 
-        // 4. Izvuci subject (u tvom slučaju → userId)
+        // 2. Validacija tokena prvo
+        if (!jwtService.isTokenValid(token)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 3. Extract userId
         UUID userId = jwtService.extractUserId(token);
 
-        // 5. Ako već postoji authentication → nemoj duplirati
         if (userId == null || SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 6. Validacija tokena
-        boolean isValid = jwtService.isTokenValid(token);
-        if (!isValid) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        // 4. Učitavanje user-a (trenutno po username = userId.toString())
+        UserDetails userDetails =
+                userDetailsService.loadUserById(userId);
 
-        // 7. Učitaj user-a iz baze preko ID-a
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userId.toString());
-
-        // 8. Kreiraj Authentication objekat
+        // 5. Authentication objekat
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -70,10 +78,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         userDetails.getAuthorities()
                 );
 
-        // 9. Postavi u SecurityContext
+        // 6. Setuj context
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
-        // 10. Nastavi dalje kroz filter chain
         filterChain.doFilter(request, response);
     }
 }

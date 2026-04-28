@@ -31,12 +31,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("User already exists");
         }
 
-        try {
-            PasswordValidator.validate(request.getPassword());
-        }catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
-
+        PasswordValidator.validate(request.getPassword());
 
         User user = UserMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

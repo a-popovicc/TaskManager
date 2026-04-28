@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+
     private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
@@ -17,17 +18,23 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String subject) {
+    public UserDetails loadUserByUsername(String username) {
 
-        UUID userId = UUID.fromString(subject);
+        UUID userId = UUID.fromString(username);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found: " + userId));
 
-        return new UserPrincipal(
-                user.getId(),
-                user.getEmail()
-        );
+        return new UserPrincipal(user.getId(), user.getEmail());
+    }
+
+    public UserDetails loadUserById(UUID id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found: " + id));
+
+        return new UserPrincipal(user.getId(), user.getEmail());
     }
 }

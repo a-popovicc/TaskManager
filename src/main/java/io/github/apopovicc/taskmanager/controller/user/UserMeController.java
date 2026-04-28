@@ -1,7 +1,7 @@
 package io.github.apopovicc.taskmanager.controller.user;
 
 import io.github.apopovicc.taskmanager.dto.response.UserMeResponse;
-import io.github.apopovicc.taskmanager.model.User;
+import io.github.apopovicc.taskmanager.security.user.UserPrincipal;
 import io.github.apopovicc.taskmanager.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ public class UserMeController {
 
     @GetMapping("/me")
     public ResponseEntity<UserMeResponse> getMe(
-            @AuthenticationPrincipal User user) {
+            @AuthenticationPrincipal UserPrincipal principal) {
 
-        return ResponseEntity.ok(userService.getMe(user.getId()));
+        return ResponseEntity.ok(userService.getMe(principal.getId()));
     }
 }
