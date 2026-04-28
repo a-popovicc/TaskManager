@@ -2,6 +2,7 @@ package io.github.apopovicc.taskmanager.storage;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.apopovicc.taskmanager.exception.custom.DataLoadException;
 import io.github.apopovicc.taskmanager.model.User;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -45,7 +46,7 @@ public class JsonStorage {
             return users != null ? users : new ArrayList<>();
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load users from JSON", e);
+            throw new DataLoadException("Failed to load users from JSON", e);
         }
     }
 
@@ -71,7 +72,7 @@ public class JsonStorage {
             Files.write(path, json);
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save users to JSON", e);
+            throw new DataLoadException("Failed to save users to JSON", e);
         }
     }
 }

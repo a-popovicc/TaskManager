@@ -33,14 +33,11 @@ public class JwtService {
         return response;
     }
 
-    // EXTRACT USER ID
     public UUID extractUserId(String token) {
         String subject = extractAllClaims(token).getSubject();
         return UUID.fromString(subject);
     }
 
-
-    // VALIDATE TOKEN
     public boolean isTokenValid(String token) {
         try {
             Claims claims = extractAllClaims(token);
@@ -49,7 +46,6 @@ public class JwtService {
             return false;
         }
     }
-    // EXTRACT ALL CLAIMS
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -57,7 +53,6 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-    // CHECK EXPIRATION
     private boolean isTokenExpired(Claims claims) {
         return claims.getExpiration().before(new Date());
     }

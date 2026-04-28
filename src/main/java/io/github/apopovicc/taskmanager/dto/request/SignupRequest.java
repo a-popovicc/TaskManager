@@ -34,5 +34,6 @@ public class SignupRequest {
     private String password;
 
     @NotBlank(message = "Password-confirm cannot be empty")
+
     private String confirmPassword;
 }

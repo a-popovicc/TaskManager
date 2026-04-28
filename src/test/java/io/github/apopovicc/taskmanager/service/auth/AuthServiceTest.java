@@ -4,6 +4,10 @@ package io.github.apopovicc.taskmanager.service.auth;
 import io.github.apopovicc.taskmanager.dto.request.LoginRequest;
 import io.github.apopovicc.taskmanager.dto.request.SignupRequest;
 import io.github.apopovicc.taskmanager.dto.response.AuthResponse;
+import io.github.apopovicc.taskmanager.exception.custom.BadRequestException;
+import io.github.apopovicc.taskmanager.exception.custom.ConflictException;
+import io.github.apopovicc.taskmanager.exception.custom.ResourcesNotFoundException;
+import io.github.apopovicc.taskmanager.exception.custom.UnauthorizedException;
 import io.github.apopovicc.taskmanager.model.User;
 import io.github.apopovicc.taskmanager.repository.UserRepository;
 import io.github.apopovicc.taskmanager.security.jwt.JwtService;
@@ -13,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.lang.module.ResolutionException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,7 +54,7 @@ abstract class AuthServiceTest {
         when(userRepository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.of(new User()));
 
-        assertThrows(RuntimeException.class,
+        assertThrows(ConflictException.class,
                 () -> authService.signUp(request));
     }
     @Test
@@ -58,6 +63,7 @@ abstract class AuthServiceTest {
         SignupRequest request = new SignupRequest();
         request.setEmail("test@test.com");
         request.setPassword("Password123!");
+        request.setConfirmPassword("Password123!");
 
         User user = new User();
         user.setId(UUID.randomUUID());
@@ -93,7 +99,7 @@ abstract class AuthServiceTest {
         when(userRepository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(BadRequestException.class,
                 () -> authService.signUp(request));
     }
     @Test
@@ -105,7 +111,7 @@ abstract class AuthServiceTest {
         when(userRepository.findByEmail(request.getEmail()))
                 .thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, ()-> authService.login(request));
+        assertThrows(ResourcesNotFoundException.class, ()-> authService.login(request));
     }
 
     @Test
@@ -126,7 +132,7 @@ abstract class AuthServiceTest {
                 user.getPassword()
         )).thenReturn(false);
 
-        assertThrows(RuntimeException.class,
+        assertThrows(UnauthorizedException.class,
                 () -> authService.login(request));
     }
     @Test

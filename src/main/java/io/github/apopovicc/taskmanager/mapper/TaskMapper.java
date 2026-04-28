@@ -52,8 +52,6 @@ public class TaskMapper {
     }
     //edit request->dto-model
     public static void editRequestToTask(TaskRequest taskRequest, Task existingTask) {
-        if(existingTask == null || taskRequest == null)
-            throw new RuntimeException("Add task request or add task request null");
 
         existingTask.setTitle(taskRequest.getTitle());
         existingTask.setDescription(taskRequest.getDescription());

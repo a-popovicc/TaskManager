@@ -2,6 +2,7 @@ package io.github.apopovicc.taskmanager.service.task;
 
 import io.github.apopovicc.taskmanager.dto.request.TaskRequest;
 import io.github.apopovicc.taskmanager.dto.response.TaskDTO;
+import io.github.apopovicc.taskmanager.exception.custom.ResourcesNotFoundException;
 import io.github.apopovicc.taskmanager.mapper.TaskMapper;
 import io.github.apopovicc.taskmanager.model.Task;
 import io.github.apopovicc.taskmanager.model.User;
@@ -26,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> addTask(UUID userId, TaskRequest request) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourcesNotFoundException("User not found"));
         Task newTask = TaskMapper.TaskRequestToTask(request);
 
         if (user.getTasks() == null) {
@@ -46,7 +47,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDTO> removeTask(UUID idUser, UUID idTask) {
         User  user = userRepository.findById(idUser)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourcesNotFoundException("User not found"));
         /*
         for (int i = 0; i < user.getTasks().size(); i++) {
              if (tasks.get(i).getId().equals(taskId)) {
@@ -67,12 +68,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDTO> editTask(UUID idUser, UUID idTask, TaskRequest request) {
         User user = userRepository.findById(idUser)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourcesNotFoundException("User not found"));
         Task existingTask= user.getTasks()
                 .stream()
                 .filter(task -> task.getId().equals(idTask))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new ResourcesNotFoundException("Task not found"));
 
         TaskMapper.editRequestToTask(request,existingTask);
 
@@ -87,12 +88,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDTO> markTaskCompleted(UUID idUser, UUID idTask) {
         User user = userRepository.findById(idUser)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourcesNotFoundException("User not found"));
         Task existingTask= user.getTasks()
                 .stream()
                 .filter(task -> task.getId().equals(idTask))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new ResourcesNotFoundException("Task not found"));
 
         existingTask.setCompleted(!existingTask.isCompleted());
 

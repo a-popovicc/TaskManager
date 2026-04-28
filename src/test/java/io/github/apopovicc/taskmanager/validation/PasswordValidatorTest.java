@@ -1,7 +1,6 @@
 package io.github.apopovicc.taskmanager.validation;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import io.github.apopovicc.taskmanager.exception.custom.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -11,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PasswordValidatorTest {
     @Test
     void testValidateNull() {
-        assertThrows(IllegalArgumentException.class, () -> PasswordValidator.validate(null));
+        assertThrows(BadRequestException.class, () -> PasswordValidator.validate(null, null));
     }
     @ParameterizedTest
     @ValueSource(strings = {
@@ -23,7 +22,7 @@ class PasswordValidatorTest {
             "abcde" // 5
     })
     void testValidateLength(String password) {
-        assertThrows(IllegalArgumentException.class, () -> PasswordValidator.validate(""));
+        assertThrows(BadRequestException.class, () -> PasswordValidator.validate("", ""));
     }
     @ParameterizedTest
     @ValueSource(strings = {
@@ -34,12 +33,12 @@ class PasswordValidatorTest {
 
     })
     void testValidateUpperCase(String password) {
-        assertThrows(IllegalArgumentException.class, () -> PasswordValidator.validate("A"));
+        assertThrows(BadRequestException.class, () -> PasswordValidator.validate("A","A"));
     }
     @Test
     void testValidateUpperCase() {
         assertDoesNotThrow(
-                () -> PasswordValidator.validate("Aaaaaaaaa1!")
+                () -> PasswordValidator.validate("Aaaaaaaaa1!", "Aaaaaaaaa1!")
         );
     }
     @ParameterizedTest
@@ -53,13 +52,13 @@ class PasswordValidatorTest {
     void shouldThrowWhenPasswordHasNoSpecialCharacter(String password) {
 
         assertThrows(
-                IllegalArgumentException.class,
-                () -> PasswordValidator.validate(password)
+                BadRequestException.class,
+                () -> PasswordValidator.validate(password,  password)
         );}
     @Test
     void shouldNotThrowWhenPasswordHasSpecialCharacter() {
         assertDoesNotThrow(
-                () -> PasswordValidator.validate("!Aaaaaa"));
+                () -> PasswordValidator.validate("!Aaaaaa", "!Aaaaaa"));
 
     }
 }

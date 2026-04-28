@@ -3,6 +3,9 @@ package io.github.apopovicc.taskmanager.service.auth;
 import io.github.apopovicc.taskmanager.dto.request.LoginRequest;
 import io.github.apopovicc.taskmanager.dto.request.SignupRequest;
 import io.github.apopovicc.taskmanager.dto.response.AuthResponse;
+import io.github.apopovicc.taskmanager.exception.custom.ConflictException;
+import io.github.apopovicc.taskmanager.exception.custom.ResourcesNotFoundException;
+import io.github.apopovicc.taskmanager.exception.custom.UnauthorizedException;
 import io.github.apopovicc.taskmanager.mapper.UserMapper;
 import io.github.apopovicc.taskmanager.model.User;
 import io.github.apopovicc.taskmanager.repository.UserRepository;
@@ -28,10 +31,10 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse signUp(SignupRequest request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("User already exists");
+            throw new ConflictException("User already exists");
         }
 
-        PasswordValidator.validate(request.getPassword());
+        PasswordValidator.validate(request.getPassword(), request.getConfirmPassword());
 
         User user = UserMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -43,13 +46,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User doesn't exist"));
+                .orElseThrow(() -> new ResourcesNotFoundException("User doesn't exist"));
  
         if (!passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword()))
         {
-            throw new RuntimeException("Password doesn't match");
+            throw new UnauthorizedException("Password doesn't match");
         }
         return jwtService.generateToken(user.getId());
     }
