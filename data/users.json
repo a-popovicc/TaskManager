@@ -1,1 +1,8 @@
-[]
+[ {
+  "id" : "8e9989df-feb5-4aaa-86b7-950f6a93b61f",
+  "firstName" : "Aleksa",
+  "lastName" : "Popović",
+  "email" : "apopoviicc@gmail.com",
+  "password" : "$2a$10$9HwW0GV0I98Pko0MrsVzcu3YHqklpvdueMYW4UGG0eEZyTBWRaJQG",
+  "tasks" : []
+} ]

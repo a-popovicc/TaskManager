@@ -2,7 +2,6 @@ package io.github.apopovicc.taskmanager.controller.task;
 
 import io.github.apopovicc.taskmanager.dto.request.TaskRequest;
 import io.github.apopovicc.taskmanager.dto.response.TaskDTO;
-import io.github.apopovicc.taskmanager.model.User;
 import io.github.apopovicc.taskmanager.security.user.UserPrincipal;
 import io.github.apopovicc.taskmanager.service.task.TaskService;
 import lombok.RequiredArgsConstructor;

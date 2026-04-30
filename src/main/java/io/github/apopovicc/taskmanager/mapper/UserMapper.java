@@ -22,6 +22,7 @@ public class UserMapper {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
 
+
         dto.setTasks(
                 user.getTasks()
                         .stream()

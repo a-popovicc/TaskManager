@@ -17,7 +17,7 @@ public class UserMeController {
 
     private final UserService userService;
 
-    @GetMapping("/me")
+    @GetMapping("/user/me")
     public ResponseEntity<UserMeResponse> getMe(
             @AuthenticationPrincipal UserPrincipal principal) {
 
