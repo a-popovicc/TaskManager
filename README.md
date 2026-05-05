@@ -1,155 +1,88 @@
-# 🧠 Task Manager API (Spring Backend Learning Project)
-🚧 Status: **In Progress**
+# 🧠 Task Manager API
 
-## 📌 Overview
+Backend REST API built with **Spring Boot** as a learning project focused on designing a clean, maintainable backend architecture.
 
-**Task Manager API** is a backend-focused project built with **Spring Boot** whose primary goal is **learning and applying clean backend architecture and API design principles**.
-
-The project is intentionally focused on **backend engineering**, not UI development.
-Its purpose is to demonstrate understanding of:
-
-* REST API design
-* Spring dependency injection
-* Authentication flow
-* Service-layer architecture
-* Testable and maintainable backend structure
-
-This project represents my transition from basic Java development into modern Spring-based backend development.
+The goal of this project was to transition from core Java development to real-world **Spring backend engineering** by implementing authentication, layered architecture, and production-like API design.
 
 ---
+## 🧩 Key Learning Outcomes
 
-## 🎯 Project Goals
+Through this project I worked with several concepts for the first time:
 
-The main objective of this project is learning how to design a **healthy, scalable backend**.
-
-Key learning goals:
-
-* Understanding how Spring handles web requests
-* Designing clean service & controller layers
-* Separating responsibilities (Controller → Service → Repository)
-* Implementing authentication logic
-* Building a stable API before introducing a real database
-* Writing testable business logic
-
----
-
-## 🚧 Current Status
-<ul>
-<li>✅ Authentication system completed</li>
-<li>✅ Token-based authorization</li>
-<li>✅ User service</li>
-<li>✅ Spring security filter chain</li>
-<li>✅ Task management features in progress</li>
-<li>✅ Controller layer & API endpoints (integration with security filter)</li>
-<li>🚧 Exception handling</li>
-<li>🚧 Database migration planned</li>
-</ul>
-
+- building and exposing REST endpoints and understanding backend–client communication
+- implementing JWT security in Spring
+- designing a global exception handling system
+  
 ---
 
 ## 🏗️ Architecture
 
-The project follows a simplified layered architecture:
+The application follows a **layered backend architecture**:
 
-### Layers
+- **Controller Layer** — handles HTTP requests & responses  
+- **Service Layer** — business logic and validation  
+- **Repository Layer** — data abstraction  
+- **DTO & Mapper Layer** — separates API models from domain models  
 
-**Controllers**
+This structure keeps the project scalable, testable, and easy to extend.
 
-* Handle HTTP requests
-* Map endpoints
-* Return API responses
-
-**Services**
-
-* Contain business logic
-* Validate data
-* Coordinate application flow
-
-**Repositories**
-
-* Abstract data access
-* Provide persistence interface
-
-**Mappers / DTOs**
-
-* Separate API models from domain models
-* Prevent entity exposure
 
 ---
 
-## 🔐 Authentication System
+## 💾 Storage Strategy
 
-Implemented features:
+The application uses JSON-based storage to prioritize learning backend design, Spring request handling, and API communication before introducing a relational database.
 
-* User registration
-* Login flow
-* Token generation
-* JWT-based authentication filter
-* Protected endpoints
-
-Authentication logic is fully separated from business logic to keep the backend modular and maintainable.
 
 ---
 
-## 💾 Database Approach (JSON Storage)
+## ⚙️ Tech Stack
 
-Instead of using a traditional SQL database, the project currently uses a **JSON file as a storage layer**.
-
-### Why JSON?
-
-The foc us of this phase is:
-
-* learning **Spring Web**
-* designing **clean APIs**
-* building **correct service architecture**
-
-rather than configuring infrastructure.
-
-The storage layer behaves like a repository abstraction, meaning:
-
-✅ business logic does **not depend** on storage implementation
-✅ database can later be replaced with PostgreSQL/MySQL without changing services
-
-Future plan:
-
-JSON Storage → JPA Repository → SQL Database
+- Java 21  
+- Spring Boot  
+- Spring Web  
+- Spring Security  
+- JWT  
+- Maven  
+- JUnit & Mockito  
 
 ---
 
-## ⚙️ Technologies Used
+## 🚀 Features
 
-* Java 21
-* Spring Boot
-* Spring Web
-* Spring Security (custom auth flow)
-* JWT (simplified implementation)
-* JUnit & Mockito
-* Maven
+- User registration & login  
+- JWT authentication & authorization  
+- Protected API endpoints  
+- Task management system (CRUD)  
+- Global exception handling  
+- Layered architecture (Controller → Service → Repository)  
+- DTO mapping & entity isolation  
+- Unit testing with JUnit & Mockito  
 
 ---
 
 ## 🧪 Testing
 
-The project includes unit tests for:
+Unit tests cover:
 
-* Service layer logic
-* Authentication scenarios
-* Error handling
-
-Testing focuses on verifying **behavior**, not framework internals.
-
----
-## 🚀 Future Improvements
-
-* Replace JSON storage with SQL database
-* Role-based authorization system (Admin / Client roles)
-* User permissions & access control
-* Exception handling standardization
+- service-layer business logic
+- authentication scenarios
+- exception handling behavior
 
 ---
 
-## 👨‍💻 Author
+## 🖥️ Frontend Client
 
-Backend learning project built as part of my journey toward a **Junior Backend Developer** role.
+This project also includes a simple frontend application used for testing and demonstrating the API.
 
-This project is actively developed while expanding knowledge of Spring ecosystem and backend engineering best practices.
+Frontend repository:
+👉 https://github.com/a-popovicc/TaskManager-front
+
+### Running the full application
+
+Run both projects simultaneously:
+
+- **Backend (Task Manager API)** → http://localhost:8080  
+- **Frontend Client** → http://localhost:5173  
+
+The frontend communicates with the backend API to demonstrate authentication, protected routes, and task management features.
