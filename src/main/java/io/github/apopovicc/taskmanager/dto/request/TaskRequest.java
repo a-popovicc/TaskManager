@@ -1,6 +1,8 @@
 package io.github.apopovicc.taskmanager.dto.request;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class TaskRequest {
     private String title;
     @NotBlank
     private String description;
-    @NotBlank
+    @NotNull(message = "Due date is required")
+    @Future
     private LocalDateTime dueDate;
 }

@@ -38,8 +38,12 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         String message = ex.getBindingResult()
-                .getFieldError()
-                .getDefaultMessage();
+                .getFieldErrors()
+                .stream()
+                .map(err -> err.getDefaultMessage())
+                .findFirst()
+                .orElse("Validation failed");
+
 
         ApiErrorResponse response =
                 new ApiErrorResponse(

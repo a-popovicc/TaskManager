@@ -4,5 +4,11 @@
   "lastName" : "Popović",
   "email" : "apopoviicc@gmail.com",
   "password" : "$2a$10$9HwW0GV0I98Pko0MrsVzcu3YHqklpvdueMYW4UGG0eEZyTBWRaJQG",
-  "tasks" : []
+  "tasks" : [ {
+    "id" : "6b625b3c-ca7c-4eff-b9f7-1a468ef93a09",
+    "title" : "Front",
+    "description" : "Ispravi da sa datumom ide i vreme ",
+    "completed" : true,
+    "dueDate" : "2026-11-11T11:11:00"
+  } ]
 } ]
